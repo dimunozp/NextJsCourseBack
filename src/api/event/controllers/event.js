@@ -6,7 +6,7 @@
 
 const { createCoreController } = require("@strapi/strapi").factories;
 
-module.exports = createCoreController("api::event.event", ({strapi}) => ({
+module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   async me(ctx) {
     const user = ctx.state.user;
 
@@ -19,8 +19,9 @@ module.exports = createCoreController("api::event.event", ({strapi}) => ({
     }
 
     const data = await strapi
-        .service("api::event.event")
-        .find({ user: user.id });
+      .entityService.findMany("api::event.event", {
+        filters: { user: user },
+      });
 
     if (!data) {
       return ctx.notFound();
