@@ -28,7 +28,6 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
   async update(ctx) {
     const { id } = ctx.params;
     let entity;
-    console.log(0, id, ctx.state.user);
     const [events] = await strapi.entityService.findMany("api::event.event", {
       filters: { id: ctx.params.id, user: ctx.state.user },
     });
@@ -36,14 +35,12 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
       return ctx.unauthorized("You can't update this entry");
     }
     if (ctx.is("multipart")) {
-      console.log(1);
       const { data, files } = parseMultipartData(ctx);
       entity = await strapi.entityService.update("api::event.event", id, {
         data: data,
         files,
       });
     } else {
-      console.log(2);
       entity = await strapi.entityService.update("api::event.event", id, {
         data: { ...ctx.request.body.data },
       });
@@ -59,7 +56,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     if (!events) {
       return ctx.unauthorized("You can't update this entry");
     }
-    const entity = await strapi.entityService.update("api::event.event", id);
+    const entity = await strapi.entityService.delete("api::event.event", id);
     return await this.sanitizeOutput(entity, ctx);
   },
   // Get logged in users
