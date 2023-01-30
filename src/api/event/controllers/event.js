@@ -18,9 +18,8 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
         files,
       });
     } else {
-      ctx.request.body.user = ctx.state.user.id;
       entity = await strapi.entityService.create("api::event.event", {
-        data: { ...ctx.request.body },
+        data: { ...ctx.request.body.data, user: ctx.state.user },
       });
     }
     return await this.sanitizeOutput(entity, ctx);
@@ -46,7 +45,7 @@ module.exports = createCoreController("api::event.event", ({ strapi }) => ({
     } else {
       console.log(2);
       entity = await strapi.entityService.update("api::event.event", id, {
-        data: { ...ctx.request.body },
+        data: { ...ctx.request.body.data },
       });
     }
     return await this.sanitizeOutput(entity, ctx);
